@@ -1,3 +1,5 @@
 schemes/
 templates/
 .vscode/
+base16_builder.egg-info/
+__pycache__/
