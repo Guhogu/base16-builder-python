@@ -7,7 +7,7 @@ from click_default_group import DefaultGroup
 import yaml
 import pystache
 
-BASE_PATH = path.dirname(__file__)
+BASE_PATH = path.dirname(path.realpath(__file__))
 SOURCES_DIR = path.join(BASE_PATH, 'sources')
 SCHEMES_DIR = path.join(BASE_PATH, 'schemes')
 TEMPLATES_DIR = path.join(BASE_PATH, 'templates')
@@ -34,6 +34,7 @@ def update():
 
     click.secho('\nUpdating templates...', fg='cyan')
     update_dir('templates')
+    click.secho('')
 
 def update_dir(dir_name):
     "Update a directory"
@@ -67,7 +68,10 @@ def update_or_clone(repo_path, url):
 @click.command()
 def build():
     "Builds all the templates"
-    click.echo("Building...")
+    click.secho("Building...", fg='cyan')
+    if not path.isdir(TEMPLATES_DIR):
+        click.secho('Run builder update first !', fg='red')
+        exit(1)
     dir_count = len(listdir(TEMPLATES_DIR))
     i = 0
     for template_dir in listdir(TEMPLATES_DIR):
