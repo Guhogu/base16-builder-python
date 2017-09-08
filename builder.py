@@ -1,5 +1,5 @@
 "A base16-builder written in python"
-from os import path, makedirs, listdir, devnull
+from os import path, makedirs, listdir, devnull, curdir
 from shutil import rmtree
 import subprocess
 import click
@@ -7,7 +7,7 @@ from click_default_group import DefaultGroup
 import yaml
 import pystache
 
-BASE_PATH = path.dirname(path.realpath(__file__))
+BASE_PATH = curdir
 SOURCES_DIR = path.join(BASE_PATH, 'sources')
 SCHEMES_DIR = path.join(BASE_PATH, 'schemes')
 TEMPLATES_DIR = path.join(BASE_PATH, 'templates')
@@ -21,11 +21,16 @@ def cli():
 @click.command()
 def update():
     "Downloads schemes"
-    if not SOURCES_DIR:
-        makedirs(SOURCES_DIR)
-    with open(path.join(BASE_PATH, 'sources.yaml')) as source_file:
+    sources_path = path.join(BASE_PATH, 'sources.yaml')
+    if not path.isfile(sources_path):
+        click.secho('No sources.yaml file present !', fg='red')
+        exit(1)
+
+    with open(sources_path) as source_file:
         sources = yaml.load(source_file.read())
 
+    if not path.isdir(SOURCES_DIR):
+        makedirs(SOURCES_DIR)
     update_or_clone(path.join(SOURCES_DIR, 'schemes'), sources['schemes'])
     update_or_clone(path.join(SOURCES_DIR, 'templates'), sources['templates'])
 
