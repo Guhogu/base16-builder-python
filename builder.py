@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 "A base16-builder written in python"
 from os import path, makedirs, listdir, devnull
 from shutil import rmtree
