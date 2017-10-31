@@ -96,7 +96,7 @@ def build():
 
 def build_template(template_dir, config_key, config):
     "Build a single template"
-    output = path.join(template_dir, config['output'])
+    output = path.join(template_dir, '..', config['output'])
     if path.isdir(output):
         rmtree(output)
     makedirs(output)
